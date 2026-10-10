@@ -11,39 +11,12 @@ body{overflow:hidden}
   position:fixed!important;
   inset:0!important;
   z-index:3000!important;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(160,160,160,.18), transparent 30%),
-    radial-gradient(circle at 88% 24%, rgba(110,110,110,.14), transparent 26%),
-    radial-gradient(circle at 74% 86%, rgba(130,130,130,.11), transparent 31%),
-    linear-gradient(135deg,#111 0%,#0b0b0b 48%,#111 100%)!important;
+  background:\n    linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),\n    url('/assets/stone59_background.webp') center center / cover no-repeat!important;
   display:grid!important;
   place-items:center!important;
   text-align:center!important;
 }
-.intro:before{
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(115deg,transparent 0 12%,rgba(255,255,255,.05) 20%,transparent 31%),
-    linear-gradient(300deg,transparent 0 14%,rgba(255,255,255,.035) 23%,transparent 35%),
-    radial-gradient(ellipse at 5% 85%,rgba(255,255,255,.08),transparent 28%),
-    radial-gradient(ellipse at 100% 58%,rgba(255,255,255,.07),transparent 28%);
-}
-.intro:after{
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.35;
-  background:
-    repeating-linear-gradient(48deg,transparent 0 22px,rgba(255,255,255,.05) 23px,rgba(255,255,255,.05) 24px,transparent 25px 47px),
-    repeating-linear-gradient(-48deg,transparent 0 26px,rgba(255,255,255,.03) 27px,rgba(255,255,255,.03) 28px,transparent 29px 52px);
-  background-size:230px 230px,280px 280px;
-}
-.intro-inner{position:relative;z-index:2}
-}
+
 #site,.topbar{visibility:hidden}
 html.stone59-ready #site,
 html.stone59-ready .topbar{visibility:visible}
