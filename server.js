@@ -11,7 +11,9 @@ body{overflow:hidden}
   position:fixed!important;
   inset:0!important;
   z-index:3000!important;
-  background:\n    linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),\n    url('/assets/stone59_background.webp') center center / cover no-repeat!important;
+  background:
+    linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),
+    url('/assets/stone59_background.webp') center center / cover no-repeat!important;
   display:grid!important;
   place-items:center!important;
   text-align:center!important;
@@ -52,7 +54,8 @@ const server = http.createServer(async (req, res) => {
       'x-frame-options',
       'transfer-encoding',
       'content-length',
-      'connection'
+      'connection',
+      'cache-control'
     ]);
 
     upstream.headers.forEach((value, key) => {
@@ -61,7 +64,27 @@ const server = http.createServer(async (req, res) => {
       }
     });
 
-    res.setHeader('cache-control', 'public, max-age=60');
+    const contentType = upstream.headers.get('content-type') || '';
+    const pathname = target.pathname.toLowerCase();
+    const isLiveCode =
+      contentType.includes('text/html') ||
+      contentType.includes('text/css') ||
+      contentType.includes('javascript') ||
+      pathname.endsWith('.html') ||
+      pathname.endsWith('.css') ||
+      pathname.endsWith('.js');
+
+    res.setHeader(
+      'cache-control',
+      isLiveCode
+        ? 'no-store, no-cache, must-revalidate, max-age=0'
+        : 'public, max-age=300, stale-while-revalidate=60'
+    );
+    if (isLiveCode) {
+      res.setHeader('pragma', 'no-cache');
+      res.setHeader('expires', '0');
+    }
+
     res.statusCode = upstream.status;
 
     if (req.method === 'HEAD') {
@@ -69,7 +92,6 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const contentType = upstream.headers.get('content-type') || '';
     const raw = Buffer.from(await upstream.arrayBuffer());
 
     if (contentType.includes('text/html')) {
@@ -88,6 +110,7 @@ const server = http.createServer(async (req, res) => {
   } catch (err) {
     res.statusCode = 502;
     res.setHeader('content-type', 'text/plain; charset=utf-8');
+    res.setHeader('cache-control', 'no-store');
     res.end('STONE59 temporairement indisponible.');
   }
 });
